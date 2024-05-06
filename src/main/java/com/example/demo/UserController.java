@@ -5,39 +5,43 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/v1/user")
 public class UserController {
-    private final UserService userService;
+    private final UserRepository userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserRepository userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/user")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody User user) {
-        return userService.create(user);
+        return userService.save(user);
     }
 
-    @GetMapping("/user")
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
     public List<User> read() {
-        return userService.read();
+        return (List<User>) userService.findAll();
     }
 
-    @GetMapping("/user/{id}")
-    public User readById(@PathVariable String id) {
-        return userService.readById(id);
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<User> readById(@PathVariable Long id) {
+        return userService.findById(id);
     }
 
-    @PutMapping("/user")
+    @PutMapping("/")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public User update(@RequestBody User user) {
-        return userService.update(user);
+        return userService.save(user);
     }
 
-    @DeleteMapping("/user")
-    @ResponseStatus(HttpStatus.GONE)
+    @DeleteMapping()
+    @ResponseStatus(HttpStatus.OK)
     public void delete(@RequestBody User user) {
         userService.delete(user);
     }

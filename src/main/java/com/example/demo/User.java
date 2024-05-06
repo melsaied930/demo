@@ -1,23 +1,16 @@
 package com.example.demo;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.List;
-
-@Document(collection = "user")
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-public class User {
-    @Id
-    private String id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private List<Course> course;
+@Table("DEMO\".\"USER")
+public record User
+        (
+                @Id @Column("ID") Long id,
+                @Column("FIRSTNAME") String firstName,
+                @Column("LASTNAME") String lastName,
+                @Column("EMAIL") String email,
+                @Column("LASTNAME") String password
+        ) {
 }

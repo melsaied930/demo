@@ -5,39 +5,43 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/v1/course")
 public class CourseController {
-    private final CourseService courseService;
+    private final CourseRepository courseService;
 
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseRepository courseService) {
         this.courseService = courseService;
     }
 
-    @PostMapping("/course")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Course create(@RequestBody Course course) {
-        return courseService.create(course);
+        return courseService.save(course);
     }
 
-    @GetMapping("/course")
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
     public List<Course> read() {
-        return courseService.read();
+        return (List<Course>) courseService.findAll();
     }
 
-    @GetMapping("/course/{id}")
-    public Course readById(@PathVariable String id) {
-        return courseService.readById(id);
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.FOUND)
+    public Optional<Course> readById(@PathVariable String id) {
+        return courseService.findById(id);
     }
 
-    @PutMapping("/course")
+    @PutMapping()
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Course update(@RequestBody Course course) {
-        return courseService.update(course);
+        return courseService.save(course);
     }
 
-    @DeleteMapping("/course")
-    @ResponseStatus(HttpStatus.GONE)
+    @DeleteMapping()
+    @ResponseStatus(HttpStatus.OK)
     public void delete(@RequestBody Course course) {
         courseService.delete(course);
     }
